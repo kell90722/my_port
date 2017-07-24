@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			#ansver {
+				width: 1000px;
+				height: 360px;
+				margin: 0 auto;
+				background-color: orange;
+				color: white;
+				font-size: 22px;
+			}
+			
+			input {
+				width: 650px;
+				height: 24px;
+				font-size: 20px;
+				line-height: 24px;
+				margin-left: 150px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="box"></div>
+	</body>
+	<script src="jquery-3.2.1.js"></script>
+	<script src="vue-2.0.js"></script>
+	<script>
+		Vue.component("v-content", {
+			template: `
+				<div>
+					<div id="ansver">{{ansverContent}}</div>
+					<br/>
+					<input type="text" id="ask" v-model="askContent" />
+					<button @click="send(askContent)">send</button>
+				</div>
+			`,
+			data: function() {
+				return {
+					askContent: "",
+					ansverContent: ""
+				}
+			},
+			methods: {
+				send: function(ask) {
+//					askContent = $("#ask").val();
+//					askContent="";
+					var self = this;
+					console.log(self);
+//					console.log(askContent)
+					$.ajax({
+						tyle: "GET",
+						url: "http://www.tuling123.com/openapi/api?key=c75ba576f50ddaa5fd2a87615d144ecf&info=" + ask,
+						dataType: "json",
+						async: true,
+						success: function(data) {
+							self.ansverContent = data.text;
+							console.log(self.ansverContent)
+						}
+					})
+				}
+			},
+//			mounted: function() {
+//				this.send()
+//			}
+		})
+
+		new Vue({
+			el: "#box",
+			template: `
+				<div>
+					<v-content></v-content>
+				</div>
+			`,
+		})
+	</script>
+
+</html>
